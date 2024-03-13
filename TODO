@@ -15,4 +15,4 @@ The set_up_worker.sh downloads java, hadoop and spark. sets the environment vari
 Appends drivers and master to etc/hosts.
 Fetech config files from master.
 
-OBS: The worker hostname is put manually.
+OBS: The worker hostname is put manually. Also the worker needs reboot to set the worker hostname.
