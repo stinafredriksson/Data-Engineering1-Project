@@ -15,7 +15,7 @@ flavor = "ssc.xlarge"
 private_net = "UPPMAX 2024/1-1 Internal IPv4 Network"
 floating_ip_pool_name = None
 floating_ip = None
-image_name = "da0d8cf7-a0eb-41ce-8db0-dd0d056b821d "
+image_name = "da0d8cf7-a0eb-41ce-8db0-dd0d056b821d"
 
 identifier = random.randint(1000,9999)
 
