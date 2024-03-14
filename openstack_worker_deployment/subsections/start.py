@@ -11,11 +11,11 @@ from keystoneauth1 import session
 from neutronclient.v2_0 import client as neutron_client
 import random
 
-flavor = "ssc.medium.highcpu" 
+flavor = "ssc.xlarge" 
 private_net = "UPPMAX 2024/1-1 Internal IPv4 Network"
 floating_ip_pool_name = None
 floating_ip = None
-image_name = "31dbaaf8-2200-44bc-b4f2-44ab4be099ca"
+image_name = "da0d8cf7-a0eb-41ce-8db0-dd0d056b821d "
 
 identifier = random.randint(1000,9999)
 
@@ -60,6 +60,8 @@ def generate_local_ip(network_id):
 image = nova.glance.find_image(image_name)
 
 flavor = nova.flavors.find(name=flavor)
+
+instances = nova.servers.list()
 
 if private_net != None:
     net = nova.neutron.find_network(private_net)
