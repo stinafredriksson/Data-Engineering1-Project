@@ -10,8 +10,9 @@ from keystoneauth1 import loading
 from keystoneauth1 import session
 from neutronclient.v2_0 import client as neutron_client
 import random
+import re
 
-flavor = "ssc.xlarge" 
+flavor = "ssc.tiny" 
 private_net = "UPPMAX 2024/1-1 Internal IPv4 Network"
 floating_ip_pool_name = None
 floating_ip = None
@@ -56,12 +57,38 @@ def generate_local_ip(network_id):
         else:
             print(f"IP {ip_address} is in use, generating a new one...")
 
+def extractLastNumber(s):
+    # Regular expression pattern to match the last number in the string
+    pattern = r'\d+$'
+    match = re.search(pattern, s)
+    if match:
+        return int(match.group())
+    else:
+        return None
+    
 
 image = nova.glance.find_image(image_name)
 
 flavor = nova.flavors.find(name=flavor)
 
 instances = nova.servers.list()
+
+# Fetch all instances
+numbersInUse = []
+# Print the names of all instances
+# print("List of available instances:")
+for instance in instances:
+    name = instance.name
+    if "DE_12_worker" in name:
+        # print(name)
+        number = extractLastNumber(name)
+        # print("Number is: " + str(number))
+        numbersInUse.append(int(number))
+
+for i in range(max(numbersInUse)+1):
+    if i+1 not in numbersInUse:
+        workerName = "DE_12_worker" + str(i+1)
+        break
 
 if private_net != None:
     net = nova.neutron.find_network(private_net)
@@ -80,8 +107,7 @@ else:
 
 secgroups = ['default','Spark', 'Erik_Dahlin']
 
-print ("Creating instance ... ")
-instance = nova.servers.create(name="DE_12_worker", image=image, flavor=flavor, key_name='DE_12', userdata=userdata, nics=nics, security_groups=secgroups)
+instance = nova.servers.create(name=workerName, image=image, flavor=flavor, key_name='DE_12', userdata=userdata, nics=nics, security_groups=secgroups)
 
 # incase you want to login to the production server 
 #instance = nova.servers.create(name="prod_server_without_docker", image=image, flavor=flavor, key_name='access-key-name',userdata=userdata, nics=nics,security_groups=secgroups)
