@@ -8,6 +8,8 @@ from  novaclient import client
 import keystoneclient.v3.client as ksclient
 from keystoneauth1 import loading
 from keystoneauth1 import session
+from neutronclient.v2_0 import client as neutron_client
+import random
 
 flavor = "ssc.medium.highcpu" 
 private_net = "UPPMAX 2024/1-1 Internal IPv4 Network"
@@ -29,7 +31,31 @@ auth = loader.load_from_options(auth_url=env['OS_AUTH_URL'],
 
 sess = session.Session(auth=auth)
 nova = client.Client('2.1', session=sess)
+neutron = neutron_client.Client(session=sess)
 print ("user authorization completed.")
+
+def is_ip_available(ip_address, network_id):
+    """Check if the given IP address is available in the specified network."""
+    # List all ports in the network
+    ports = neutron.list_ports(network_id=network_id)['ports']
+    # Check each port to see if the IP address is already in use
+    for port in ports:
+        for fixed_ip in port['fixed_ips']:
+            if fixed_ip['ip_address'] == ip_address:
+                return False
+    return True
+
+def generate_local_ip(network_id):
+    """Generate an available local IP address within the specified network."""
+    while True:
+        #third_octet = random.randint(0, 255)
+        fourth_octet = random.randint(1, 254)  # Avoiding 0 and 255
+        ip_address = f"192.168.2.{fourth_octet}"
+        if is_ip_available(ip_address, network_id):
+            return ip_address
+        else:
+            print(f"IP {ip_address} is in use, generating a new one...")
+
 
 image = nova.glance.find_image(image_name)
 
@@ -37,7 +63,8 @@ flavor = nova.flavors.find(name=flavor)
 
 if private_net != None:
     net = nova.neutron.find_network(private_net)
-    nics = [{'net-id': net.id, 'v4-fixed-ip': '192.168.2.200'}]
+    random_local_ip = generate_local_ip(net.id)
+    nics = [{'net-id': net.id, 'v4-fixed-ip': random_local_ip}]
 else:
     sys.exit("private-net not defined.")
 
@@ -49,7 +76,7 @@ if os.path.isfile(cfg_file_path):
 else:
     sys.exit("cloud-cfg.txt is not in current working directory")
 
-secgroups = ['default','Spark']
+secgroups = ['default','Spark', 'Erik_Dahlin']
 
 print ("Creating instance ... ")
 instance = nova.servers.create(name="DE_12_worker", image=image, flavor=flavor, key_name='DE_12', userdata=userdata, nics=nics, security_groups=secgroups)

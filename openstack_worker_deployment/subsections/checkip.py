@@ -11,12 +11,7 @@ import keystoneclient.v3.client as ksclient
 from keystoneauth1 import loading
 from keystoneauth1 import session
 
-flavor = "ssc.xlarge.highcpu" 
 private_net = "UPPMAX 2024/1-1 Internal IPv4 Network"
-floating_ip_pool_name = None
-floating_ip = None
-image_name = "31dbaaf8-2200-44bc-b4f2-44ab4be099ca"
-
 identifier = random.randint(1000,9999)
 
 loader = loading.get_plugin_loader('password')
@@ -32,8 +27,6 @@ auth = loader.load_from_options(auth_url=env['OS_AUTH_URL'],
 sess = session.Session(auth=auth)
 nova = client.Client('2.1', session=sess)
 print ("user authorization completed.")
-
-
 
 # Initialize Nova and Neutron clients
 nova = client.Client(version='2.1', session=sess)
