@@ -1,0 +1,25 @@
+################# 5 workers (8, 4, 2, 2, 1 Cores) #################
+
+### First run:
+
+Time to load the dataset (seconds): 100.48088359832764 seconds
+Time to load the dataset (minutes): 1.6746813933054605 minutes
+
+Time to run the experiment (seconds): 238.93346548080444 seconds
+Time to run the experiment (minutes): 3.98222442468 minutes
+
+### Second run:
+
+Time to load the dataset (seconds): 74.81593632698059 seconds
+Time to load the dataset (minutes): 1.2469322721163432 minutes
+
+Time to run the experiment (seconds): 235.55574870109558 seconds
+Time to run the experiment (minutes): 3.9259291450182596 minutes
+
+### Third run:
+
+Time to load the dataset (seconds): 102.76564478874207 seconds
+Time to load the dataset (minutes): 1.7127607464790344 minutes
+
+Time to run the experiment (seconds): 268.5250720977783 seconds
+Time to run the experiment (minutes): 4.475417868296305 minutes
