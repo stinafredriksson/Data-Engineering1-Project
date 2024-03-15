@@ -1,0 +1,32 @@
+#cloud-config
+
+apt_update: true
+apt_upgrade: true
+
+users:
+  - default
+  - ssh_authorized_keys: '     ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC9JWiLScvHxW/8MPyDAZFTDEgdWVEBkxfDL3U1M3J9M3ucWeJAFvCkAVGyPQhlm3o5vGAdWr74N7evwaehBh17449l4o3rgT+5EtaJdJ7hJBxJKWjRVT6H8EDEhuzfbRvDgKYrNtz8AIikDlOn73yY7Gu+a1RVcTVyHNqWik9d/8AqBCgyZCA3EcAoLgqo0pzXkISjD/68TwZ9uRoH0GhF1j0xjEQpNQUZu4c0pbdAOwEV4asxDQ0kccWNF28aqNosBkxI83wrA7aHbANryV6s91eMGG/PGL7h0baJnlFb8E1Ex0hbp9VpoNPnaFPSRus1N8B0Su83DEf+AxvUJqlZ Generated-by-Nova '
+
+packages:
+ - python3-dev
+ - build-essential
+ - openjdk-17-jdk
+
+byobu_default: system 
+
+runcmd:
+ - whoami
+ - [ for i in {1..255}; do echo "192.168.2.$i host-192-168-2-$i-de1" >> /etc/hosts; done ]
+ - sudo hostnamectl set-hostname --static host-$(hostname -I | awk '{$1=$1};1' | sed 's/\./-/'g)-de1
+ - sudo hostname > /etc/hostname
+ - hostname
+
+ - wget -nv https://downloads.apache.org/spark/spark-3.5.0/spark-3.5.0-bin-hadoop3.tgz -P /home/ubuntu
+ - cd /home/ubuntu
+ - tar -xf spark-3.5.0-bin-hadoop3.tgz
+
+ - echo "export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64" >> /home/ubuntu/.bashrc 
+ - echo "export SPARK_HOME=/home/ubuntu/spark-3.5.0-bin-hadoop3" >> /home/ubuntu/.bashrc
+ - source ~/.bashrc
+
+ - spark-3.5.0-bin-hadoop3/sbin/start-worker.sh spark://192.168.2.250:7077

@@ -1,0 +1,18 @@
+Set up right now:
+
+On master launch new worker
+cd ~
+sudo nano /etc/hosts
+workerX worker_ip
+
+scp -i .ssh/DE_12.pem .ssh/DE_12.pem ubuntu@new_ip:/home/ubuntu
+scp -i .ssh/DE_12.pem set_up_worker.sh ubuntu@new_ip:/home/ubuntu
+ssh -i .ssh/DE_12.pem ubuntu@new_ip
+
+bash set_up_worker.sh
+
+The set_up_worker.sh downloads java, hadoop and spark. sets the environment variable.
+Appends drivers and master to etc/hosts.
+Fetech config files from master.
+
+OBS: The worker hostname is put manually. Also the worker needs reboot to set the worker hostname.
