@@ -12,7 +12,7 @@ from neutronclient.v2_0 import client as neutron_client
 import random
 import re
 
-flavor = "ssc.tiny" 
+flavor = "ssc.xlarge.highcpu"
 private_net = "UPPMAX 2024/1-1 Internal IPv4 Network"
 floating_ip_pool_name = None
 floating_ip = None
