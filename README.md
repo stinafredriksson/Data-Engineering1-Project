@@ -13,3 +13,4 @@ The datanalyze was performed on the Webis-TLDR-17 Corpus dataset of Reddit posts
      What are the most frequent occurring words of the most popular subreddits?
 
 Additionally we wanted to test the strong scalability of the solution. This together with the data anlaysis can be found in the Experiments folder. 
+The final report is named "Data_Engineering_Final_Project.pdf".
